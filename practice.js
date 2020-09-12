@@ -217,4 +217,207 @@ console.log(num.toExponential(1)); // 숫자를 지수 형태의 문자열로 �
 console.log("test".charAt(2)); // 인자로 받은 위치에 있는 문자를 반환
 */
 
+// 3가지 함수 생성법 : 함수 선언문, 함수 표현식, 생성자를 이용
+// 함수 선언문은 함수 호이스팅 (Function Hoisting) 이 일어나 유효범위가 코드의 처음부터 끝으로 정해진다. 그로 인해 함수를 먼저 호출하고 생성해도 호출이 가능하게 되며, 이러한
+// 함수 호이스팅의 특성때문에 함수 표현식을 이용한 함수 생성을 권장한다.
+/*
+function add1 (x, y) {  // 함수 선언문을 통한 함수 생성
+    return x+y;
+}
+
+var add2 = function (x, y) { // 함수 표현식을 통한 함수 생성, 함수명이 없으므로 익명함수이고 add2라는 변수가 함수를 참조하고있음
+    return x+y;
+};
+var plus = add2; // add2라는 함수변수를 다른 변수에 다시 할당할 수 있음
+
+var add3 = function sum(x, y) { // 기명함수를 사용한 함수 표현식
+    return x+y;
+};
+// console.log(sum3,4); => 함수 표현식에서 기명함수를 사용하더라도 외부에서는 함수에 접근할 수 없기 때문에 오류가 발생함
+
+var factorialVar = function factorial(n) { // 기명함수를 사용하면 재귀적인 호출 처리가 가능
+    if (n <= 1) {
+        return 1;
+    }
+    return n * factorial(n-1);
+};
+
+var add = new Function('x', 'y', 'return x + y'); // Function() 생성자 함수를 이용한 함수 생성, 자주 사용되지 않음
+*/
+
+// 함수도 객체이기 때문에 프로퍼티를 동적으로 추가할 수 있음.
+/*
+function add (x, y) {
+    return x+y;
+}
+
+// add() 함수 객체에 프로퍼티 추가
+add.result = add(3,2);
+add.status = 'OK';
+*/
+
+// 변수나 프로퍼티에 함수 값을 할당
+/*
+var foo = 100;
+var bar = function() { return 100; };
+console.log(bar());
+
+
+var obj = {};
+obj.baz = function () {return 200;}
+console.log(obj.baz());
+*/
+
+// 함수를 다른 함수의 인자로 전달함
+/*
+var foo = function(func) {
+    func();
+};
+
+foo(function() {
+    console.log('Function can be used as the argument.');
+});
+*/
+
+// 함수를 다른 함수의 리턴값으로 활용
+/*
+var foo = function() {
+    return function() {
+        console.log('this function is the return value');
+    };
+};
+
+var boo = foo();
+boo();
+*/
+
+// 함수에서의 length 프로퍼티는 함수가 정상적으로 실행 될 때 기대되는 인자의 개수를 나타냄
+/*
+function func0() {
+
+}
+
+function func1(x) {
+    return x;
+}
+
+function func2(x, y) {
+ return x + y;
+}
+
+function func3(x, y, z) {
+    return x + y + z;
+}
+
+console.log('func0.length - ' + func0.length); // func0.length - 0
+console.log('func1.length - ' + func1.length); // func1.length - 1
+console.log('func2.length - ' + func2.length); // func2.length - 2
+console.log('func3.length - ' + func3.length); // func3.length - 3
+*/
+
+
+// 즉시실행함수 사용, 즉시실행함수는 재호출이 불가능함
+/*
+(function (name) { // 괄호로 함수 리터럴을 감쌈
+    console.log('This is the immediate function -> ' + name);
+})('foo'); // 함수가 바로 호출될 수 있게 () 괄호 쌍을 추가
+*/
+
+// 내부 함수 이용
+/*
+function parent() {
+    var a = 100;
+    var b = 200;
+
+    function child() {
+        var b = 300;
+
+        console.log(a);
+        console.log(b);
+    }
+    child();
+}
+parent();
+child();
+*/
+
+// 함수 스코프 외부에서 내부 함수 호출
+/*
+function parent() {
+    var a = 100;
+
+    var child = function () {
+        console.log(a);
+    }
+
+    return child;
+}
+
+var inner = parent(); // => 실행이 끝난 부모 함수 스코프의 변수를 참조하는 함수를 '클로저' 라고 한다
+inner(); 
+*/
+
+// 자기 자신을 재정의하는 함수
+/*
+var self = function() {
+    console.log('a');
+    return function() {
+        console.log('b');
+    }
+}
+self = self();  // a
+self();         // b
+*/
+
+// 자바스크립트는 인자의 개수가 정확하지 않아도 함수 실행이 가능하다.
+/*
+function func(a1, a2) {
+    console.log(a1, a2);
+}
+
+func();         // undefined undefined
+func(1);        // 1 undefined
+func(1, 2);     // 1 2
+func(1, 2, 3);  // 1 2
+*/
+
+// arguments를 이용한 인자의 개수가 정해지지 않은 함수 구현
+/*
+function sum() {
+    var result = 0;
+
+    for (var i=0;i<arguments.length;i++) { // 인자의 개수가 정해지지 않은 함수를 개발하는데 유용 => 다른 언어 공부할 땐 메소드 오버로딩으로 구현한 것으로 기억함
+        result += arguments[i];
+    }
+
+    return result;
+}
+
+console.log(sum(1, 2, 3));
+console.log(sum(1, 2, 3, 4, 5, 6, 7, 8, 9));
+*/
+
+
+// 메소드 호출 사용 시 this 바인딩
+/*
+var myObject = {
+    name : 'foo',
+    sayName : function() {
+        console.log(this.name);
+    }
+};
+
+var otherObject = {
+    name : 'bar'
+};
+
+otherObject.sayName = myObject.sayName; // 프로퍼티를 동적 할당함
+
+myObject.sayName();
+otherObject.sayName();
+*/
+
+// 함수 호출 사용 시 this 바인딩
+// 함수 호출 시 this 는 전역 객체에 바인딩 된다.
+// 브라우저 환경에서는 window 객체, Node.js 같은 자바스크립트 런타임 환경에서는 global 객체가 된다.
 
