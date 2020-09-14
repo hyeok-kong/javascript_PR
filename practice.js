@@ -221,6 +221,8 @@ console.log("test".charAt(2)); // 인자로 받은 위치에 있는 문자를 �
 // #16 3가지 함수 생성법 : 함수 선언문, 함수 표현식, 생성자를 이용
 // 함수 선언문은 함수 호이스팅 (Function Hoisting) 이 일어나 유효범위가 코드의 처음부터 끝으로 정해진다. 그로 인해 함수를 먼저 호출하고 생성해도 호출이 가능하게 되며, 이러한
 // 함수 호이스팅의 특성때문에 함수 표현식을 이용한 함수 생성을 권장한다.
+// 함수 표현식으로 함수를 생성할 때는 ;(세미콜론)을 붙인다.
+
 // #17 익명함수와 기명함수의 사용
 /*
 function add1 (x, y) {  // 함수 선언문을 통한 함수 생성
@@ -423,6 +425,8 @@ otherObject.sayName();
 // 함수 호출 시 this 는 전역 객체에 바인딩 된다.
 // 브라우저 환경에서는 window 객체, Node.js 같은 자바스크립트 런타임 환경에서는 global 객체가 된다.
 
+ // --------------------2020_09_13-------------------------
+
 // #30 내부 함수의 this 바인딩
 /*
 var value = 100;
@@ -518,3 +522,133 @@ myFunction(1, 2, 3);
 1. 일반 함수나 메소드는 리턴값을 지정하지 않을 경우 undefined 값을 리턴
 2. 생성자 함수에서 리턴값을 지정하지 않을 경우 생성된 객체가 리턴 => 명시적으로 다른 객체를 리턴할 시에는 명시해준 객체를 리턴함
 */
+
+ // --------------------2020_09_14-------------------------
+
+// #36 prototype 프로퍼티와 [Prototype] 링크 구분
+/*
+function Person(name) {
+    this.name = name;
+}
+
+var foo = new Person('foo');
+// 생성자 함수의 prototype 프로퍼티는 함수의 입장에서 자신과 링크된 프로토타입 객체를 가리킴
+// [Prototype] 링크는 객체의 입장에서 자신의 부모 객체인 프로토타입 객체를 내부의 숨겨진 링크로 가리킴
+*/
+
+// #37 객체 리터럴 방식에서의 프로토타입 체이닝
+// 프로토타입 체이닝이란 현재 객체에 찾고자 하는 프로퍼티나 메소드가 없다면 [Property] 링크를 따라 부모 프로토타입 객체의 프로퍼티를 차례대로 검색하는 것.
+/*
+var myObject = {
+    name : 'foo',
+    sayName : function() {
+        console.log('My Name is ' +  this.name);
+    }
+};
+
+myObject.sayName();
+console.log(myObject.hasOwnProperty('name'));       // hasOwnProperty() => 이 메소드를 호출한 객체에 인자로 넘긴 문자열 이름의 프로퍼티나 메소드가 있는지 체크 (True/False)
+console.log(myObject.hasOwnProperty('nickname'));   // myObject에 hasOwnProperty() 메소드가 없기 때문에 연결된 Object.prototype 객체에 연결하여 찾아봄, 존재하기에 에러 x 
+myObject.sayNickName(); 
+*/
+
+// #38 생성자 함수 방식에서의 프로토타입 체이닝
+/*
+function Person(name, age, hobby) {
+    this.name = name;
+    this.age = age;
+    this.hobby = hobby;
+}
+var foo = new Person('foo', 30, 'tennis');
+
+console.log(foo.hasOwnProperty('name')); // True
+// 부모 객체인 Person.prototype에 hasOwnProperty() 가 존재하지 않지만, Person.prototype 역시 객체이기 때문에 다시 Object.prototype으로 연결됨.
+*/
+
+// #39 프로토타입 체이닝의 종점, Object.prototype
+// 모든 자바스크립트 객체는 Object.prototype 을 가지기 때문에 어떤 객체던 접근, 공유가 가능하다.
+
+// #40 기본 타입에 메소드 추가
+/*
+String.prototype.testMethod = function() {
+    console.log('This is the String.prototype.testMethod()');
+};
+
+var str = "this is test";
+str.testMethod(); // String .prototype 에 프로토타입 체이닝을 통해 접근, 생성한 메소드를 실행함
+*/
+
+// #41 프로토타입 객체의 동적 메소드 생성
+/*
+function Person(name) {
+    this.name = name;
+}
+
+var foo = new Person('foo');
+
+Person.prototype.sayHello = function() { //Person.prototype 프로퍼티에 메소드 추가
+    console.log('Hello');
+}
+
+foo.sayHello();
+*/
+
+// #42 프로토타입 메소드에서의 this 바인딩
+// 일반 메소드와 같다. 호출한 객체에 바인딩된다.
+/*
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.getName = function() {
+    return this.name;
+};
+
+var foo = new Person('foo');
+
+console.log(foo.getName());
+
+Person.prototype.name = 'person';
+
+console.log(Person.prototype.getName());
+*/
+
+// #43 프로토타입 객체 변경
+/*
+function Person(name) {
+    this.name = name;
+}
+
+console.log(Person.prototype.constructor);
+
+var foo = new Person('foo');
+console.log(foo.country);
+
+Person.prototype = { // 디폴트 프로토타입 객체 변경 => 객체 리터럴 방식으로 객체 생성
+    country : 'korea',
+};
+
+console.log(Person.prototype.constructor);
+
+var bar = new Person('bar'); // 변경한 프로토타입 객체를 가리킴
+console.log(foo.country);
+console.log(bar.country);
+console.log(foo.constructor);
+console.log(bar.constructor);
+*/
+
+// #44 프로토타입 체이닝과 동적 프로퍼티 생성
+/*
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.country = 'Korea';
+
+var foo = new Person('foo');
+console.log(foo.country); // Korea
+
+foo.country = 'USA';                // foo 객체의 프로퍼티에 값이 없으므로 추가 => 동적 프로퍼티 생성
+console.log(foo.country); // USA
+*/
+
