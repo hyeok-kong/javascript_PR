@@ -652,3 +652,85 @@ foo.country = 'USA';                // foo 객체의 프로퍼티에 값이 없�
 console.log(foo.country); // USA
 */
 
+// --------------------2020_09_15-------------------------
+
+// #45 실행 컨텍스트
+/*
+console.log("This is global context"); // 전역 컨텍스트 (가장 먼저 실행)
+
+function ExContext1() {
+    console.log("This is ExContext1");
+};  // 질문) 왜 ;가 붙는지 잘 모르겠음.
+
+function ExContext2() {
+    ExContext1();
+    console.log("This is ExContext2");
+};
+
+ExContext2();
+*/
+
+// #46 활성객체,변수객체와 스코프 체인
+// 활성객체 = 변수객체, 둘이 같은 객체를 가리킴
+/*
+function execute(param1, param2) {
+    var a = 1, b = 2;
+    function func() {
+        return a+b;
+    }
+    return param1 + param2 + func();
+}
+
+execute(3, 4);
+*/
+// 함수 호출이 없고, 실행 가능한 코드들만 나열되어있는 전역 코드
+// 전역 실행 컨텍스트 단 하나만이 실행되고 있어 참조할 상위 컨텍스트가 없음 => 자기 자신을 스코프 체인으로 가리키는 최상위 변수 객체
+/*
+var var1 = 1;
+var var2 = 2;
+console.log(var1);
+console.log(var2);
+*/
+/*
+var var1 = 1; // 전역 실행 컨텍스트 생성
+var var2 = 2;
+function func() { // func() 함수객체 생성 => 현재 실행되는 컨텍스트의 [scope]를 그대로 가짐 
+    var var1 = 10;
+    var var2 = 20;
+    console.log(var1);
+    console.log(var2);
+}
+func(); // 함수를 실행 => func 실행 컨텍스트 생성, 스코프 체인은 실행된 함수의 [scope]프로퍼티를 복사 후 현재 생성된 변수 객체를 복사한 스코프 체인의 맨 앞에 추가
+        // => [func 변수 객체 - 전역 객체] ==> 스코프 체인 = 현재 실행 컨텍스트의 변수 객체 + 상위 컨텍스트의 스코프 체인
+console.log(var1);
+console.log(var2);
+*/
+
+//ex1
+/*
+var value = "value1";
+
+function printFunc() {
+    var value = "value2";
+
+    function printValue() {
+        return value;
+    }
+
+    console.log(printValue());
+}
+printFunc();
+*/
+//ex2
+/*
+var value = "value1";
+
+function printValue() {
+    return value;
+}
+function printFunc(func) {
+    var value = "value2";
+    console.log(func());
+}
+printFunc(printValue;
+*/
