@@ -734,3 +734,34 @@ function printFunc(func) {
 }
 printFunc(printValue;
 */
+
+// --------------------2020_09_15-------------------------
+
+// #47 클로저 : 이미 종료된 외부 함수의 변수를 참조하는 함수
+// 스코프 체인을 생각해보면 outerFunc() 함수의 실행 컨텍스트가 종료된 후 innerFunc() 가 실행된다. 하지만 innerFunc() 는 이미 종료된 자신의 외부함수의 변수를 참조하는데, 
+// 이는 실행 컨텍스트는 종료되었지만 변수 객체는 남아 스코프 체인으로 연결되어 있기에 가능하다. 이렇듯 이미 종료된 외부 함수의 변수를 참조하는 함수를 클로저라고 한다.
+/*
+function outerFunc() {
+    var x = 10; // 자유 변수 : 클로저에 참조되는 외부함수의 변수 
+    var innerFunc = function() { console.log(x); }; // innerFunc() 가 클로저가 된다
+    return innerFunc;
+}
+
+var inner = outerFunc();
+inner();
+*/
+// ex)클로저의 전형적인 패턴
+/*
+function outerFunc() {
+    var x = 1; // 자유 변수
+    return function() {
+        // x와 arguments를 활용한 로직
+    }
+}
+
+var new_func = outerFunc();
+// outerFunc() 실행 컨텍스트 끝남.
+new_func();
+*/
+
+
