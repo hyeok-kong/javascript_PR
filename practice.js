@@ -764,4 +764,118 @@ var new_func = outerFunc();
 new_func();
 */
 
+// --------------------2020_09_15-------------------------
 
+// #48 클로저의 활용
+// 클로저는 이해가 잘 안가 나중에 다시 공부하도록 하겠음
+// ex1) 특정 함수에 사용자가 정의한 객체의 메소드 연결
+/*
+function HelloFunc() {
+    this.greeting = "hello";
+}
+
+HelloFunc.prototype.call = function(func) {
+    func ? func(this.greeting) : this.func(this.greeting);
+}
+
+var userFunc = function(greeting) {
+    console.log(greeting);
+}
+
+var objHello = new HelloFunc();
+objHello.func = userFunc;
+objHello.call();
+
+
+// ex2)
+
+function saySomething(obj, methodName, name) {
+    return (function(greeting) {
+        return obj[methodName](greeting, name);
+    });
+}
+
+function newObj(obj, name) {
+    obj.func = saySomething(this, "who", name);
+    return obj;
+}
+
+newObj.prototype.who = function(greeting, name) {
+    console.log(greeting + " " + (name || "everyone"));
+}
+
+var obj1 = new newObj(objHello, "zzoon");
+*/
+
+// #49 클래스, 생성자, 메소드의 구현
+/*
+function Person1(arg) {
+    this.name = arg;
+
+    this.getName = function() {
+        return this.name;
+    }
+
+    this.setName = function(value) {
+        this.name = value;
+    }
+}
+
+var me = new Person1("zzoon");
+console.log(me.getName());
+
+// 위 코드에서 객체를 여러개 생성할 경우, getName,setName 메소드를 각 객체마다 생성하여 메모리 낭비가 됨
+// => 프로토타입 체이닝을 이용하여 자원을 절약할 수 있음
+// ex1)
+function Person(arg) {
+    this.name = arg;
+}
+
+Person.prototype.getName = function() {
+    return this.name;
+}
+
+Person.prototype.setName = function(value) {
+    this.name = value;
+}
+
+var man = new Person("hb");
+console.log(man.getName());
+
+var men = new Person("bh");
+console.log(men.getName());
+*/
+
+// ex2)
+/*
+Function.prototype.method = function(name, func) { // 모든 함수의 프로토타입인 Function.prototype에 method 추가
+    this.prototype[name] = func;
+}
+
+function Person(arg) {
+    this.name = arg;
+}
+
+Person.method("setName", function(value) {
+    this.name = value;
+});
+
+Person.method("getName", function() {
+    return this.name;
+});
+
+var me = new Person("me");
+var you = new Person("you");
+
+console.log(me.getName());
+console.log(you.getName());
+*/
+
+// ex3) 더글라스 크락포드의 메소드 정의 방법
+/*
+Function.prototype.method = funciton(name, func) {
+    if (this.prototype[name]) {
+        this.prototype[name] = func;
+    }
+}
+*/
