@@ -652,7 +652,7 @@ foo.country = 'USA';                // foo 객체의 프로퍼티에 값이 없�
 console.log(foo.country); // USA
 */
 
-// --------------------2020_09_15-------------------------
+// --------------------2020_09_16-------------------------
 
 // #45 실행 컨텍스트
 /*
@@ -735,7 +735,7 @@ function printFunc(func) {
 printFunc(printValue;
 */
 
-// --------------------2020_09_15-------------------------
+// --------------------2020_09_17-------------------------
 
 // #47 클로저 : 이미 종료된 외부 함수의 변수를 참조하는 함수
 // 스코프 체인을 생각해보면 outerFunc() 함수의 실행 컨텍스트가 종료된 후 innerFunc() 가 실행된다. 하지만 innerFunc() 는 이미 종료된 자신의 외부함수의 변수를 참조하는데, 
@@ -764,7 +764,7 @@ var new_func = outerFunc();
 new_func();
 */
 
-// --------------------2020_09_15-------------------------
+// --------------------2020_09_18-------------------------
 
 // #48 클로저의 활용
 // 클로저는 이해가 잘 안가 나중에 다시 공부하도록 하겠음
@@ -879,3 +879,103 @@ Function.prototype.method = funciton(name, func) {
     }
 }
 */
+// --------------------2020_09_19-------------------------
+
+// #50 프로토타입을 이용한 상속
+/*
+function create_objecto(o) { // Object.create() 함수가 지원하는 기능
+    function F() {}
+    F.prototype = o;
+    return new F();
+}
+*/
+/*
+var person = { // 윗 함수를 이용한 상속방법
+    name : "zzoon",
+    getName : function() {
+        return this.name;
+    },
+    setName : function(arg) {
+        this.name = arg;
+    }
+};
+
+var student = Object.create(person);
+var added = {
+    setAge : function(age) {
+        this.age = age;
+    },
+    getAge : function() {
+        return this.age;
+    }
+};
+function extend(obj, prop) { // jQuery 에서 구현되어있는 함수, 첫번째 객체에 두번째 객체의 프로퍼티를 복사하는 기능
+    if (!prop) { prop = obj; obj = this;}
+    for (var i in prop) obj[i] = prop[i]; // 얕은복사여서 값을 복사하는게 아닌 단순한 참조
+    return obj; 
+}
+extend(student, added);
+//studnet.setName("me");
+//console.log(studnet.getName());
+
+student.setAge(25);
+console.log(student.getAge());
+*/
+
+// #51 클래스 기반의 상속
+// ex1) 자식 객체가 부모 객체에 직접 프로토타입 체인을 접근
+/*
+function Person(arg) {
+    this.name = arg;
+}
+
+Person.prototype.setName = function(value) {
+    this.name = value;
+};
+
+Person.prototype.getName = function() {
+    return this.name;
+};
+
+function Student(arg) {    
+}
+
+var you = new Person("iamhjoo");
+Student.prototype = you;
+
+var me = new Student("zzoon");
+me.setName("zzoon");
+console.log(me.getName());
+*/
+//ex2) 중간객체를 만들어 위 방법의 단점을 해결함
+/*
+function Person(arg) {
+    this.name = arg;
+}
+
+Function.prototype.method = function(name, func) {
+    this.prototype[name] = func;
+}
+
+Person.method("setName", function(value) {
+    this.name = value;
+});
+Person.method("getName", function() {
+    return this.name;
+});
+
+function Student(arg) {
+}
+
+function F() {};
+F.prototype = Person.prototype;
+Student.prototype = new F();
+Student.prototype.constructor = Student;
+Student.super = Person.prototype;
+
+var me = new Student();
+me.setName("zzoon");
+console.log(me.getName());
+*/
+
+// 캡슐화 및 정보은닉은 클로저 공부한 후 공부
